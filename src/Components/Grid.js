@@ -3,16 +3,16 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Node from './Node'
 
 const useStyles = makeStyles({
-    root: {
+    root: props => ({
         display: 'grid',
-        gridTemplateColumns: 'repeat(20, 1fr)', 
-        gridTemplateRows: 'repeat(20, 1fr)',
+        gridTemplateColumns: `repeat(${props.colums}, 1fr)`, 
+        gridTemplateRows: `repeat(${props.rows}, 1fr)`,
         gridGap: '0',
         alignSelf: 'flex-start',
-        width: 400,
-        height: 400,
+        width: props.colums * 20,
+        height: props.rows * 20,
         justifyContent: 'center'
-    },
+    }),
   });
 
 function Grid(props) {
