@@ -22,6 +22,7 @@ const createNode = (col, row) => {
        isEnd: false,
        isVisited: false,
 	   isWall: false,
+	   isPath: false,
        distance: Infinity,
        prevNode: null,
    };
@@ -117,7 +118,8 @@ const bfs = (grid, start, end) => {
 
 const logPath = (grid, endNode) => {
 	
-	var path = [endNode];
+	var path = [];
+	path.push(endNode);
 	while (true) {
 		var row = endNode.row;
 		var col = endNode.col;
@@ -126,14 +128,46 @@ const logPath = (grid, endNode) => {
 			break;
 		}
 		path.push(prevNode);
-		endNode = prevNode;
+		endNode = {
+			row: endNode.row,
+			col: endNode.col,
+		};
 	}
 
 	console.log(path);
 };
 
-const drawPath = (grid, endNode) => {
-	console.log('draw path')
+const getPath = (grid, end) => {
+	var path = [];
+	var currentNodeCord = {
+		row: end[0],
+		col: end[1],
+	}
+
+	path.push(currentNodeCord);
+	var curRow = currentNodeCord[0];
+	var curCol = currentNodeCord[1];
+	var prevNodeCord = grid[curRow][curCol].prevNode;
+	console.log(prevNodeCord)
+	while (prevNodeCord !== null) {
+		currentNodeCord = prevNodeCord;
+		path.push(currentNodeCord);
+		var curRow = currentNodeCord.row;
+		var curCol = currentNodeCord.col;
+		var curNode = grid[curRow][curCol];
+		prevNodeCord = curNode.prevNode;
+	}
+
+	return path;
+};
+
+const drawPath = (grid, path) => {
+	console.log(path)
+	for (let i = 0; i < path.length; i++) {
+		let row = path[i][0];
+		let col = path[i][1];
+		grid[row][col].isPath = true;
+	}
 };
 
 
@@ -149,20 +183,17 @@ function Grid(props) {
 
     var grid = initGrid(rows, colums);
 	setStart(grid, start[0], start[1]);
-	setEnd(grid, end[0], end[0]);
+	setEnd(grid, end[0], end[1]);
 	bfs(grid, start, end);
-	var endNode = {
-		row: end[0],
-		col: end[1],
-	}
 	console.log(grid);
-	//logPath(grid, endNode);
+	var path = getPath(grid, end);
+	drawPath(grid, path);
 
 	const gridMap = grid.map((row, rowIndex) => {
 		return (
 			<div key={rowIndex}>
 				{row.map((node, nodeIndex) => {
-					const { row, col, isStart, isEnd, isVisited } = node;
+					const { row, col, isStart, isEnd, isPath, isVisited } = node;
 					return (
 						<Node
 							key={`${row}${col}`}
@@ -170,6 +201,7 @@ function Grid(props) {
 							height={20}
 							isStart={isStart}
 							isEnd={isEnd}
+							isPath={isPath}
 							isVisited={isVisited}
 						/> 
 					);
