@@ -189,7 +189,7 @@ function Grid(props) {
     const { rows, colums } = props;
 
 	var start = [4, 4];
-	var end = [10, 12];
+	var end = [12, 12];
 	var walls = [
 		[7, 3],
 		[7, 4],
@@ -206,7 +206,6 @@ function Grid(props) {
 	setWalls(grid, walls);
 	bfs(grid, start, end);
 	var path = getPath(grid, end);
-	console.log(path)
 	drawPath(grid, path);
 
 	const gridMap = grid.map((row, rowIndex) => {

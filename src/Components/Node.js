@@ -8,20 +8,20 @@ const useStyles = makeStyles({
         border: '1px solid black',
     }),
     start: {
-        backgroundColor: '#39a6a3'
+        background: 'linear-gradient(45deg, #47D163 30%, #29E7DB 90%)'
     },
     end: {
-        backgroundColor: '#f54748'
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
+    },
+    path: {
+        background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
+    },
+    wall: {
+        background: 'linear-gradient(45deg, #2F2F2F 30%, #121212 90%)'
     },
     normal: {
         backgroundColor: 'white'
     },
-    path: {
-        backgroundColor: '#8DBFFE'
-    },
-    wall: {
-        backgroundColor: '#111111'
-    }
   });
 
 function Node(props) {
