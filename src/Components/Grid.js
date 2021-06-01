@@ -36,6 +36,10 @@ const setEnd = (grid, col, row) => {
 	grid[col][row].isEnd = true;
 }
 
+const setWall = (grid, col, row) => {
+	grid[col][row].isWall = true;
+};
+
 const initGrid = (rows, colums) => {
     var grid = []
     for (let row = 0; row < rows; row ++) {
@@ -145,10 +149,9 @@ const getPath = (grid, end) => {
 	}
 
 	path.push(currentNodeCord);
-	var curRow = currentNodeCord[0];
-	var curCol = currentNodeCord[1];
+	var curRow = currentNodeCord.row;
+	var curCol = currentNodeCord.col;
 	var prevNodeCord = grid[curRow][curCol].prevNode;
-	console.log(prevNodeCord)
 	while (prevNodeCord !== null) {
 		currentNodeCord = prevNodeCord;
 		path.push(currentNodeCord);
@@ -162,10 +165,10 @@ const getPath = (grid, end) => {
 };
 
 const drawPath = (grid, path) => {
-	console.log(path)
 	for (let i = 0; i < path.length; i++) {
-		let row = path[i][0];
-		let col = path[i][1];
+		let nodeCord = path[i];
+		let row = nodeCord.row;
+		let col = nodeCord.col;
 		grid[row][col].isPath = true;
 	}
 };
@@ -178,22 +181,27 @@ function Grid(props) {
 
     const { rows, colums } = props;
 
-	var start = [1, 1];
-	var end = [8, 8];
+	var start = [4, 4];
+	var end = [10, 12];
 
     var grid = initGrid(rows, colums);
 	setStart(grid, start[0], start[1]);
 	setEnd(grid, end[0], end[1]);
+	setWall(grid, 7, 4);
+	setWall(grid, 7, 5);
+	setWall(grid, 7, 6);
+	setWall(grid, 7, 7);
+	setWall(grid, 7, 8);
 	bfs(grid, start, end);
-	console.log(grid);
 	var path = getPath(grid, end);
+	console.log(path)
 	drawPath(grid, path);
 
 	const gridMap = grid.map((row, rowIndex) => {
 		return (
 			<div key={rowIndex}>
 				{row.map((node, nodeIndex) => {
-					const { row, col, isStart, isEnd, isPath, isVisited } = node;
+					const { row, col, isStart, isEnd, isWall, isPath, isVisited } = node;
 					return (
 						<Node
 							key={`${row}${col}`}
@@ -201,6 +209,7 @@ function Grid(props) {
 							height={20}
 							isStart={isStart}
 							isEnd={isEnd}
+							isWall={isWall}
 							isPath={isPath}
 							isVisited={isVisited}
 						/> 

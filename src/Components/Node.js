@@ -8,26 +8,29 @@ const useStyles = makeStyles({
         border: '1px solid black',
     }),
     start: {
-        backgroundColor: 'green'
+        backgroundColor: '#39a6a3'
     },
     end: {
-        backgroundColor: 'red'
+        backgroundColor: '#f54748'
     },
     normal: {
         backgroundColor: 'white'
     },
     path: {
-        backgroundColor: 'black'
+        backgroundColor: '#8DBFFE'
+    },
+    wall: {
+        backgroundColor: '#111111'
     }
   });
 
 function Node(props) {
 
     let classes = useStyles(props);
-    const { isStart, isEnd, isPath } = props;
+    const { isStart, isEnd, isWall, isPath } = props;
 
     return (
-        <div className={`${classes.root} ${isStart ? classes.start : isEnd ? classes.end : isPath ? classes.path : classes.normal}`} />
+        <div className={`${classes.root} ${isStart ? classes.start : isEnd ? classes.end : isWall ? classes.wall : isPath ? classes.path : classes.normal}`} />
     )
 }
 
