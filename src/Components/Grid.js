@@ -1,5 +1,6 @@
 import React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import Button from '@material-ui/core/Button'
 import Node from './Node'
 
 const useStyles = makeStyles({
@@ -172,6 +173,7 @@ const getPath = (grid, end) => {
 };
 
 const drawPath = (grid, path) => {
+	console.log('draw path')
 	for (let i = 0; i < path.length; i++) {
 		let nodeCord = path[i];
 		let row = nodeCord.row;
@@ -198,6 +200,7 @@ function Grid(props) {
 		[7, 7],
 		[9, 9],
 		[10, 9],
+		[12, 8]
 	];
 
     var grid = initGrid(rows, colums);
@@ -206,7 +209,7 @@ function Grid(props) {
 	setWalls(grid, walls);
 	bfs(grid, start, end);
 	var path = getPath(grid, end);
-	drawPath(grid, path);
+	drawPath(grid, path)
 
 	const gridMap = grid.map((row, rowIndex) => {
 		return (
@@ -231,9 +234,12 @@ function Grid(props) {
 	})
 
     return (
-        <div className={classes.root}>
-            {gridMap}
-        </div>
+		<>
+			<div className={classes.root}>
+				{gridMap}
+			</div>
+			<Button variant="contained" color="primary" onClick={ () => drawPath(grid, path) }>Run</Button>
+		</>
     )
 }
 
