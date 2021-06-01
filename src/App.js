@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <h1>NavBar</h1>
-      <Grid rows={40} colums={40}/>
+      <Grid rows={10} colums={10}/>
     </div>
   );
 }
