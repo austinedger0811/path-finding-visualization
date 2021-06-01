@@ -8,8 +8,8 @@ const useStyles = makeStyles({
         gridTemplateColumns: `repeat(${props.colums}, 1fr)`, 
         gridTemplateRows: `repeat(${props.rows}, 1fr)`,
         alignSelf: 'flex-start',
-        width: props.colums * 20,
-        height: props.rows * 20,
+        width: props.colums * 40,
+        height: props.rows * 40,
         justifyContent: 'center',
     }),
 });
@@ -217,8 +217,8 @@ function Grid(props) {
 					return (
 						<Node
 							key={`${row}${col}`}
-							width={20}
-							height={20}
+							width={40}
+							height={40}
 							isStart={isStart}
 							isEnd={isEnd}
 							isWall={isWall}
