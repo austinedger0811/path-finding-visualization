@@ -40,6 +40,13 @@ const setWall = (grid, col, row) => {
 	grid[col][row].isWall = true;
 };
 
+const setWalls = (grid, walls) => {
+	for (let i = 0; i < walls.length; i++) {
+		let wall = walls[i];
+		setWall(grid, wall[0], wall[1]);
+	}
+};
+
 const initGrid = (rows, colums) => {
     var grid = []
     for (let row = 0; row < rows; row ++) {
@@ -183,15 +190,20 @@ function Grid(props) {
 
 	var start = [4, 4];
 	var end = [10, 12];
+	var walls = [
+		[7, 3],
+		[7, 4],
+		[7, 5],
+		[7, 6],
+		[7, 7],
+		[9, 9],
+		[10, 9],
+	];
 
     var grid = initGrid(rows, colums);
 	setStart(grid, start[0], start[1]);
 	setEnd(grid, end[0], end[1]);
-	setWall(grid, 7, 4);
-	setWall(grid, 7, 5);
-	setWall(grid, 7, 6);
-	setWall(grid, 7, 7);
-	setWall(grid, 7, 8);
+	setWalls(grid, walls);
 	bfs(grid, start, end);
 	var path = getPath(grid, end);
 	console.log(path)
