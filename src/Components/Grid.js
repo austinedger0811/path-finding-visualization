@@ -3,6 +3,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Button from '@material-ui/core/Button'
 import Node from './Node'
 
+import './Grid.css'
+
 const useStyles = makeStyles({
     root: props => ({
         display: 'grid',
@@ -26,109 +28,107 @@ const setWalls = (grid, walls) => {
 	}
 };
 
-const validNode = (grid, row, col) => {
-	var rowLength = grid.length;
-	var colLength = grid[0].length;
-	if (row < 0 || row >= rowLength || col < 0 || col >= colLength) {
-		return false;
-	}
-	if (grid[row][col].isWall) {
-		return false;
-	}
-	return true;
-};
+// const validNode = (grid, row, col) => {
+// 	var rowLength = grid.length;
+// 	var colLength = grid[0].length;
+// 	if (row < 0 || row >= rowLength || col < 0 || col >= colLength) {
+// 		return false;
+// 	}
+// 	if (grid[row][col].isWall) {
+// 		return false;
+// 	}
+// 	return true;
+// };
 
-const getNeighbors = (grid, row, col) => {
-	let neighbors = [];
-	if (validNode(grid, row, col - 1)) {
-		neighbors.push({
-			row: row,
-			col: col - 1,
-		});
-	}
-	if (validNode(grid, row, col + 1)) {
-		neighbors.push({
-			row: row,
-			col: col + 1,
-		});
-	}
-	if (validNode(grid, row - 1, col)) {
-		neighbors.push({
-			row: row - 1,
-			col: col,
-		});
-	}
-	if (validNode(grid, row + 1, col)) {
-		neighbors.push({
-			row: row + 1,
-			col: col,
-		});
-	}
-	return neighbors;
-};
+// const getNeighbors = (grid, row, col) => {
+// 	let neighbors = [];
+// 	if (validNode(grid, row, col - 1)) {
+// 		neighbors.push({
+// 			row: row,
+// 			col: col - 1,
+// 		});
+// 	}
+// 	if (validNode(grid, row, col + 1)) {
+// 		neighbors.push({
+// 			row: row,
+// 			col: col + 1,
+// 		});
+// 	}
+// 	if (validNode(grid, row - 1, col)) {
+// 		neighbors.push({
+// 			row: row - 1,
+// 			col: col,
+// 		});
+// 	}
+// 	if (validNode(grid, row + 1, col)) {
+// 		neighbors.push({
+// 			row: row + 1,
+// 			col: col,
+// 		});
+// 	}
+// 	return neighbors;
+// };
 
-const bfs = (grid, start, end) => {
+// const bfs = (grid, start, end) => {
 
-	var location = {
-		row: start[0],
-		col: start[1],
-	};
+// 	var location = {
+// 		row: start[0],
+// 		col: start[1],
+// 	};
 
-	var queue = [];
-	queue.push(location);
+// 	var queue = [];
+// 	queue.push(location);
 
-	while (queue.length) {
-		var currentLocation = queue.shift();
-		if (currentLocation.row === end[0] && currentLocation.col === end[1]) {
-			return currentLocation;
-		}
-		grid[currentLocation.row][currentLocation.col].isVisited = true;
-		var neighbors = getNeighbors(grid, currentLocation.row, currentLocation.col);
-		for (let neighbor of neighbors) {
-			if (grid[neighbor.row][neighbor.col].isVisited !== true) {
-				queue.push(neighbor);
-				grid[neighbor.row][neighbor.col].prevNode = currentLocation;
-			}
-		}
-	}
+// 	while (queue.length) {
+// 		var currentLocation = queue.shift();
+// 		if (currentLocation.row === end[0] && currentLocation.col === end[1]) {
+// 			return currentLocation;
+// 		}
+// 		grid[currentLocation.row][currentLocation.col].isVisited = true;
+// 		var neighbors = getNeighbors(grid, currentLocation.row, currentLocation.col);
+// 		for (let neighbor of neighbors) {
+// 			if (grid[neighbor.row][neighbor.col].isVisited !== true) {
+// 				queue.push(neighbor);
+// 				grid[neighbor.row][neighbor.col].prevNode = currentLocation;
+// 			}
+// 		}
+// 	}
 
-	return false;
-};
+// 	return false;
+// };
 
-const getPath = (grid, end) => {
-	var path = [];
-	var currentNodeCord = {
-		row: end[0],
-		col: end[1],
-	}
+// const getPath = (grid, end) => {
+// 	var path = [];
+// 	var currentNodeCord = {
+// 		row: end[0],
+// 		col: end[1],
+// 	}
 
-	path.push(currentNodeCord);
-	var curRow = currentNodeCord.row;
-	var curCol = currentNodeCord.col;
-	var prevNodeCord = grid[curRow][curCol].prevNode;
-	while (prevNodeCord !== null) {
-		currentNodeCord = prevNodeCord;
-		path.push(currentNodeCord);
-		var curRow = currentNodeCord.row;
-		var curCol = currentNodeCord.col;
-		var curNode = grid[curRow][curCol];
-		prevNodeCord = curNode.prevNode;
-	}
+// 	path.push(currentNodeCord);
+// 	var curRow = currentNodeCord.row;
+// 	var curCol = currentNodeCord.col;
+// 	var prevNodeCord = grid[curRow][curCol].prevNode;
+// 	while (prevNodeCord !== null) {
+// 		currentNodeCord = prevNodeCord;
+// 		path.push(currentNodeCord);
+// 		var curRow = currentNodeCord.row;
+// 		var curCol = currentNodeCord.col;
+// 		var curNode = grid[curRow][curCol];
+// 		prevNodeCord = curNode.prevNode;
+// 	}
 
-	return path;
-};
+// 	return path;
+// };
 
-const drawPath = (grid, path) => {
-	console.log('draw path')
-	for (let i = 0; i < path.length; i++) {
-		let nodeCord = path[i];
-		let row = nodeCord.row;
-		let col = nodeCord.col;
-		grid[row][col].isPath = true;
-	}
-};
-
-
+// const drawPath = (grid, path) => {
+// 	console.log('draw path')
+// 	for (let i = 0; i < path.length; i++) {
+// 		let nodeCord = path[i];
+// 		let row = nodeCord.row;
+// 		let col = nodeCord.col;
+// 		grid[row][col].isPath = true;
+// 	}
+// };
 
 function Grid(props) {
 
@@ -142,8 +142,8 @@ function Grid(props) {
 		initGrid();
 	}, []);
 
-	var start = [4, 4];
-	var end = [12, 12];
+	var start = [colums / 4, 6];
+	var end = [colums / 2, rows - 3];
 	var walls = [
 		[7, 3],
 		[7, 4],
@@ -182,7 +182,110 @@ function Grid(props) {
 		};
 	 }
 
-	const GridMap = Grid.map((row, rowIndex) => {
+	 const bfs = () => {
+
+		var location = {
+			row: start[0],
+			col: start[1],
+		};
+	
+		var queue = [];
+		queue.push(location);
+	
+		while (queue.length) {
+			var currentLocation = queue.shift();
+			if (currentLocation.row === end[0] && currentLocation.col === end[1]) {
+				getPath();
+				return currentLocation;
+			}
+			Grid[currentLocation.row][currentLocation.col].isVisited = true;
+			var neighbors = getNeighbors(currentLocation.row, currentLocation.col);
+			for (let neighbor of neighbors) {
+				if (Grid[neighbor.row][neighbor.col].isVisited !== true) {
+					queue.push(neighbor);
+					Grid[neighbor.row][neighbor.col].prevNode = currentLocation;
+				}
+			}
+		}
+	
+		return false;
+	};
+
+	const getNeighbors = (row, col) => {
+		let neighbors = [];
+		if (validNode(row, col - 1)) {
+			neighbors.push({
+				row: row,
+				col: col - 1,
+			});
+		}
+		if (validNode(row, col + 1)) {
+			neighbors.push({
+				row: row,
+				col: col + 1,
+			});
+		}
+		if (validNode(row - 1, col)) {
+			neighbors.push({
+				row: row - 1,
+				col: col,
+			});
+		}
+		if (validNode(row + 1, col)) {
+			neighbors.push({
+				row: row + 1,
+				col: col,
+			});
+		}
+		return neighbors;
+	};
+
+	const validNode = (row, col) => {
+		var rowLength = Grid.length;
+		var colLength = Grid[0].length;
+		if (row < 0 || row >= rowLength || col < 0 || col >= colLength) {
+			return false;
+		}
+		if (Grid[row][col].isWall) {
+			return false;
+		}
+		return true;
+	};
+
+	const getPath = () => {
+		var path = [];
+		var currentNodeCord = {
+			row: end[0],
+			col: end[1],
+		}
+	
+		path.push(currentNodeCord);
+		var curRow = currentNodeCord.row;
+		var curCol = currentNodeCord.col;
+		var prevNodeCord = Grid[curRow][curCol].prevNode;
+		while (prevNodeCord !== null) {
+			currentNodeCord = prevNodeCord;
+			path.push(currentNodeCord);
+			var curRow = currentNodeCord.row;
+			var curCol = currentNodeCord.col;
+			var curNode = Grid[curRow][curCol];
+			prevNodeCord = curNode.prevNode;
+		}
+	
+		setPath(path);
+	};
+
+	const drawPath = () => {
+		for (let i = 1; i < Path.length - 1; i++) {
+			let nodeCord = Path[i];
+			let row = nodeCord.row;
+			let col = nodeCord.col;
+			Grid[row][col].isPath = true;
+			document.getElementById(`node-${row}-${col}`).className = 'node visited';
+		}
+	};
+
+	var GridMap = Grid.map((row, rowIndex) => {
 		return (
 			<div key={rowIndex}>
 				{row.map((node, nodeIndex) => {
@@ -192,6 +295,8 @@ function Grid(props) {
 							key={`${row}${col}`}
 							width={40}
 							height={40}
+							row={row}
+							col={col}
 							isStart={isStart}
 							isEnd={isEnd}
 							isWall={isWall}
@@ -209,7 +314,8 @@ function Grid(props) {
 			<div className={classes.root}>
 				{GridMap}
 			</div>
-			<Button variant="contained" color="primary">Run</Button>
+			<Button variant="contained" color="primary" onClick={ () => bfs() }>Run BFS</Button>
+			<Button variant="contained" color="secondary" onClick={ () => drawPath() } >Draw Path</Button>
 		</>
     )
 }

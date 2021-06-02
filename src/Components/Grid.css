@@ -1,0 +1,9 @@
+.node {
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+}
+
+.visited {
+  background: linear-gradient(45deg, #2196f3 30%, #21cbf3 90%);
+}

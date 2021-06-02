@@ -27,10 +27,10 @@ const useStyles = makeStyles({
 function Node(props) {
 
     let classes = useStyles(props);
-    const { isStart, isEnd, isWall, isPath } = props;
+    const { row, col, isStart, isEnd, isWall, isPath, key } = props;
 
     return (
-        <div className={`${classes.root} ${isStart ? classes.start : isEnd ? classes.end : isWall ? classes.wall : isPath ? classes.path : classes.normal}`} />
+        <div id={`node-${col}-${row}`} className={`${classes.root} ${isStart ? classes.start : isEnd ? classes.end : isWall ? classes.wall : isPath ? classes.path : classes.normal}`} />
     )
 }
 
