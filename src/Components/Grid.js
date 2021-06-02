@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Button from '@material-ui/core/Button'
 import Node from './Node'
@@ -15,28 +15,6 @@ const useStyles = makeStyles({
     }),
 });
 
-const createNode = (col, row) => {
-   return {
-       col,
-       row,
-       isStart: false,
-       isEnd: false,
-       isVisited: false,
-	   isWall: false,
-	   isPath: false,
-       distance: Infinity,
-       prevNode: null,
-   };
-}
-
-const setStart = (grid, col, row) => {
-	grid[col][row].isStart = true;
-};
-
-const setEnd = (grid, col, row) => {
-	grid[col][row].isEnd = true;
-}
-
 const setWall = (grid, col, row) => {
 	grid[col][row].isWall = true;
 };
@@ -47,17 +25,6 @@ const setWalls = (grid, walls) => {
 		setWall(grid, wall[0], wall[1]);
 	}
 };
-
-const initGrid = (rows, colums) => {
-    var grid = []
-    for (let row = 0; row < rows; row ++) {
-        grid.push([])
-        for (let col = 0; col < colums; col ++) {
-            grid[row].push(createNode(col, row));
-        }
-    }
-    return grid;
-}
 
 const validNode = (grid, row, col) => {
 	var rowLength = grid.length;
@@ -128,27 +95,6 @@ const bfs = (grid, start, end) => {
 	return false;
 };
 
-const logPath = (grid, endNode) => {
-	
-	var path = [];
-	path.push(endNode);
-	while (true) {
-		var row = endNode.row;
-		var col = endNode.col;
-		var prevNode = grid[row][col][prevNode];
-		if (prevNode === null) {
-			break;
-		}
-		path.push(prevNode);
-		endNode = {
-			row: endNode.row,
-			col: endNode.col,
-		};
-	}
-
-	console.log(path);
-};
-
 const getPath = (grid, end) => {
 	var path = [];
 	var currentNodeCord = {
@@ -187,8 +133,14 @@ const drawPath = (grid, path) => {
 function Grid(props) {
 
     let classes = useStyles(props);
-
     const { rows, colums } = props;
+
+	const [Grid, setGrid] = useState([]);
+	const [Path, setPath] = useState([]);
+
+	useEffect(() => {
+		initGrid();
+	}, []);
 
 	var start = [4, 4];
 	var end = [12, 12];
@@ -200,18 +152,37 @@ function Grid(props) {
 		[7, 7],
 		[9, 9],
 		[10, 9],
-		[12, 8]
+		[12, 8],
+		[7, 8],
+		[6, 8]
 	];
 
-    var grid = initGrid(rows, colums);
-	setStart(grid, start[0], start[1]);
-	setEnd(grid, end[0], end[1]);
-	setWalls(grid, walls);
-	bfs(grid, start, end);
-	var path = getPath(grid, end);
-	drawPath(grid, path)
+	const initGrid = () => {
+		var grid = [];
+		for (let row = 0; row < rows; row++) {
+			grid.push([])
+			for (let col = 0; col < colums; col++) {
+				grid[row].push(createNode(col, row));
+			}
+		}
+		setGrid(grid);
+	}
 
-	const gridMap = grid.map((row, rowIndex) => {
+	const createNode = (col, row) => {
+		return {
+			col,
+			row,
+			isStart: col === start[0] && row === start[1],
+			isEnd: col === end[0] && row === end[1],
+			isVisited: false,
+			isWall: false,
+			isPath: false,
+			distance: Infinity,
+			prevNode: null,
+		};
+	 }
+
+	const GridMap = Grid.map((row, rowIndex) => {
 		return (
 			<div key={rowIndex}>
 				{row.map((node, nodeIndex) => {
@@ -236,9 +207,9 @@ function Grid(props) {
     return (
 		<>
 			<div className={classes.root}>
-				{gridMap}
+				{GridMap}
 			</div>
-			<Button variant="contained" color="primary" onClick={ () => drawPath(grid, path) }>Run</Button>
+			<Button variant="contained" color="primary">Run</Button>
 		</>
     )
 }
