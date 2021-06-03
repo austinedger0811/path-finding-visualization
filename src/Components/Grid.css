@@ -4,6 +4,10 @@
   border: 1px solid black;
 }
 
-.visited {
+.path {
   background: linear-gradient(45deg, #2196f3 30%, #21cbf3 90%);
+}
+
+.visited {
+  background-color: yellow;
 }

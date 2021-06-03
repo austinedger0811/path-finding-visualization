@@ -190,24 +190,33 @@ function Grid(props) {
 		};
 	
 		var queue = [];
+		var i = 1;
 		queue.push(location);
 	
 		while (queue.length) {
 			var currentLocation = queue.shift();
-			if (currentLocation.row === end[0] && currentLocation.col === end[1]) {
+			var row = currentLocation.row;
+			var col = currentLocation.col;
+			if (row === end[0] && col === end[1]) {
 				getPath();
 				return currentLocation;
 			}
-			Grid[currentLocation.row][currentLocation.col].isVisited = true;
-			var neighbors = getNeighbors(currentLocation.row, currentLocation.col);
+
+			Grid[row][col].isVisited = true;
+			// setTimeout(() => {
+			// 	markPath(row, col);
+			// }, 40 * i);
+			var neighbors = getNeighbors(row, col);
 			for (let neighbor of neighbors) {
 				if (Grid[neighbor.row][neighbor.col].isVisited !== true) {
 					queue.push(neighbor);
 					Grid[neighbor.row][neighbor.col].prevNode = currentLocation;
 				}
 			}
+			i++;
 		}
 	
+		console.log(Grid);
 		return false;
 	};
 
@@ -271,8 +280,12 @@ function Grid(props) {
 			var curNode = Grid[curRow][curCol];
 			prevNodeCord = curNode.prevNode;
 		}
-	
-		setPath(path);
+		
+		setPath(path.reverse());
+	};
+
+	const animateAlgorithm = () => {
+
 	};
 
 	const drawPath = () => {
@@ -281,8 +294,18 @@ function Grid(props) {
 			let row = nodeCord.row;
 			let col = nodeCord.col;
 			Grid[row][col].isPath = true;
-			document.getElementById(`node-${row}-${col}`).className = 'node visited';
+			setTimeout(() => {
+				markPath(row, col);
+			}, 40 * i);
 		}
+	};
+
+	const markPath = (row, col) => {
+		document.getElementById(`node-${row}-${col}`).className = 'node path';
+	};
+
+	const markVisited = (row, col) => {
+		document.getElementById(`node-${row}-${col}`).className = 'node visited';
 	};
 
 	var GridMap = Grid.map((row, rowIndex) => {
