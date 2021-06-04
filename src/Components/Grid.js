@@ -137,12 +137,13 @@ function Grid(props) {
 
 	const [Grid, setGrid] = useState([]);
 	const [Path, setPath] = useState([]);
+	const [Visited, setVisited] = useState([]);
 
 	useEffect(() => {
 		initGrid();
 	}, []);
 
-	var start = [colums / 4, 6];
+	var start = [colums / 2, 12];
 	var end = [colums / 2, rows - 3];
 	var walls = [
 		[7, 3],
@@ -190,22 +191,20 @@ function Grid(props) {
 		};
 	
 		var queue = [];
-		var i = 1;
 		queue.push(location);
+		var visited = [];
 	
 		while (queue.length) {
 			var currentLocation = queue.shift();
 			var row = currentLocation.row;
 			var col = currentLocation.col;
 			if (row === end[0] && col === end[1]) {
+				setVisited(visited);
 				getPath();
 				return currentLocation;
 			}
-
 			Grid[row][col].isVisited = true;
-			// setTimeout(() => {
-			// 	markPath(row, col);
-			// }, 40 * i);
+			visited.push(Grid[row][col]);
 			var neighbors = getNeighbors(row, col);
 			for (let neighbor of neighbors) {
 				if (Grid[neighbor.row][neighbor.col].isVisited !== true) {
@@ -213,10 +212,8 @@ function Grid(props) {
 					Grid[neighbor.row][neighbor.col].prevNode = currentLocation;
 				}
 			}
-			i++;
 		}
-	
-		console.log(Grid);
+
 		return false;
 	};
 
@@ -284,16 +281,24 @@ function Grid(props) {
 		setPath(path.reverse());
 	};
 
-	const animateAlgorithm = () => {
-
+	// check length of Visited array and count square. Something is not right...
+	const animateAlgorithm = async () => {
+		console.log(Visited)
+		for (let i = 1; i < Visited.length - 1; i++) {
+			let nodeCord = Visited[i];
+			let row = nodeCord.row;
+			let col = nodeCord.col;
+			setTimeout(() => {
+				markVisited(row, col);
+			}, 1000 * i);
+		}
 	};
 
-	const drawPath = () => {
+	const drawPath = async () => {
 		for (let i = 1; i < Path.length - 1; i++) {
 			let nodeCord = Path[i];
 			let row = nodeCord.row;
 			let col = nodeCord.col;
-			Grid[row][col].isPath = true;
 			setTimeout(() => {
 				markPath(row, col);
 			}, 40 * i);
@@ -301,11 +306,19 @@ function Grid(props) {
 	};
 
 	const markPath = (row, col) => {
+		console.log(`row: ${row}, col: ${col}`)
 		document.getElementById(`node-${row}-${col}`).className = 'node path';
 	};
 
 	const markVisited = (row, col) => {
 		document.getElementById(`node-${row}-${col}`).className = 'node visited';
+	};
+
+	const runSearch = () => {
+		bfs();
+		animateAlgorithm();
+		drawPath();
+
 	};
 
 	var GridMap = Grid.map((row, rowIndex) => {
@@ -337,8 +350,7 @@ function Grid(props) {
 			<div className={classes.root}>
 				{GridMap}
 			</div>
-			<Button variant="contained" color="primary" onClick={ () => bfs() }>Run BFS</Button>
-			<Button variant="contained" color="secondary" onClick={ () => drawPath() } >Draw Path</Button>
+			<Button variant="contained" color="primary" onClick={ () => runSearch() }>Run BFS</Button>
 		</>
     )
 }
