@@ -28,108 +28,6 @@ const setWalls = (grid, walls) => {
 	}
 };
 
-// const validNode = (grid, row, col) => {
-// 	var rowLength = grid.length;
-// 	var colLength = grid[0].length;
-// 	if (row < 0 || row >= rowLength || col < 0 || col >= colLength) {
-// 		return false;
-// 	}
-// 	if (grid[row][col].isWall) {
-// 		return false;
-// 	}
-// 	return true;
-// };
-
-// const getNeighbors = (grid, row, col) => {
-// 	let neighbors = [];
-// 	if (validNode(grid, row, col - 1)) {
-// 		neighbors.push({
-// 			row: row,
-// 			col: col - 1,
-// 		});
-// 	}
-// 	if (validNode(grid, row, col + 1)) {
-// 		neighbors.push({
-// 			row: row,
-// 			col: col + 1,
-// 		});
-// 	}
-// 	if (validNode(grid, row - 1, col)) {
-// 		neighbors.push({
-// 			row: row - 1,
-// 			col: col,
-// 		});
-// 	}
-// 	if (validNode(grid, row + 1, col)) {
-// 		neighbors.push({
-// 			row: row + 1,
-// 			col: col,
-// 		});
-// 	}
-// 	return neighbors;
-// };
-
-// const bfs = (grid, start, end) => {
-
-// 	var location = {
-// 		row: start[0],
-// 		col: start[1],
-// 	};
-
-// 	var queue = [];
-// 	queue.push(location);
-
-// 	while (queue.length) {
-// 		var currentLocation = queue.shift();
-// 		if (currentLocation.row === end[0] && currentLocation.col === end[1]) {
-// 			return currentLocation;
-// 		}
-// 		grid[currentLocation.row][currentLocation.col].isVisited = true;
-// 		var neighbors = getNeighbors(grid, currentLocation.row, currentLocation.col);
-// 		for (let neighbor of neighbors) {
-// 			if (grid[neighbor.row][neighbor.col].isVisited !== true) {
-// 				queue.push(neighbor);
-// 				grid[neighbor.row][neighbor.col].prevNode = currentLocation;
-// 			}
-// 		}
-// 	}
-
-// 	return false;
-// };
-
-// const getPath = (grid, end) => {
-// 	var path = [];
-// 	var currentNodeCord = {
-// 		row: end[0],
-// 		col: end[1],
-// 	}
-
-// 	path.push(currentNodeCord);
-// 	var curRow = currentNodeCord.row;
-// 	var curCol = currentNodeCord.col;
-// 	var prevNodeCord = grid[curRow][curCol].prevNode;
-// 	while (prevNodeCord !== null) {
-// 		currentNodeCord = prevNodeCord;
-// 		path.push(currentNodeCord);
-// 		var curRow = currentNodeCord.row;
-// 		var curCol = currentNodeCord.col;
-// 		var curNode = grid[curRow][curCol];
-// 		prevNodeCord = curNode.prevNode;
-// 	}
-
-// 	return path;
-// };
-
-// const drawPath = (grid, path) => {
-// 	console.log('draw path')
-// 	for (let i = 0; i < path.length; i++) {
-// 		let nodeCord = path[i];
-// 		let row = nodeCord.row;
-// 		let col = nodeCord.col;
-// 		grid[row][col].isPath = true;
-// 	}
-// };
-
 function Grid(props) {
 
     let classes = useStyles(props);
@@ -143,7 +41,7 @@ function Grid(props) {
 		initGrid();
 	}, []);
 
-	var start = [colums / 2, 12];
+	var start = [8, 8];
 	var end = [colums / 2, rows - 3];
 	var walls = [
 		[7, 3],
@@ -191,8 +89,8 @@ function Grid(props) {
 		};
 	
 		var queue = [];
-		queue.push(location);
 		var visited = [];
+		queue.push(location);
 	
 		while (queue.length) {
 			var currentLocation = queue.shift();
@@ -203,8 +101,12 @@ function Grid(props) {
 				getPath();
 				return currentLocation;
 			}
-			Grid[row][col].isVisited = true;
-			visited.push(Grid[row][col]);
+			if (Grid[row][col].isVisited === false) {
+				Grid[row][col].isVisited = true;
+				visited.push(Grid[row][col]);
+			}else {
+				continue;
+			}
 			var neighbors = getNeighbors(row, col);
 			for (let neighbor of neighbors) {
 				if (Grid[neighbor.row][neighbor.col].isVisited !== true) {
@@ -281,8 +183,7 @@ function Grid(props) {
 		setPath(path.reverse());
 	};
 
-	// check length of Visited array and count square. Something is not right...
-	const animateAlgorithm = async () => {
+	const animateAlgorithm = () => {
 		console.log(Visited)
 		for (let i = 1; i < Visited.length - 1; i++) {
 			let nodeCord = Visited[i];
@@ -290,11 +191,11 @@ function Grid(props) {
 			let col = nodeCord.col;
 			setTimeout(() => {
 				markVisited(row, col);
-			}, 1000 * i);
+			}, 5 * i);
 		}
 	};
 
-	const drawPath = async () => {
+	const drawPath = () => {
 		for (let i = 1; i < Path.length - 1; i++) {
 			let nodeCord = Path[i];
 			let row = nodeCord.row;
@@ -314,12 +215,15 @@ function Grid(props) {
 		document.getElementById(`node-${row}-${col}`).className = 'node visited';
 	};
 
-	const runSearch = () => {
-		bfs();
-		animateAlgorithm();
-		drawPath();
-
+	const addWalls = () => {
+		for (let i = 0; i < walls.length; i++) {
+			var location = walls[i];
+			var row = location[0];
+			var col = location[1];
+			console.log(Grid[row][col])
+		}
 	};
+	
 
 	var GridMap = Grid.map((row, rowIndex) => {
 		return (
@@ -350,7 +254,9 @@ function Grid(props) {
 			<div className={classes.root}>
 				{GridMap}
 			</div>
-			<Button variant="contained" color="primary" onClick={ () => runSearch() }>Run BFS</Button>
+			<Button variant="contained" color="primary" onClick={ () => bfs() }>Run BFS</Button>
+			<Button variant="contained" color="primary" onClick={ () => animateAlgorithm() }>Animate Algorithm</Button>
+			<Button variant="contained" color="primary" onClick={ () => drawPath() }>Draw Path</Button>
 		</>
     )
 }
