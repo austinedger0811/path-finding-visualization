@@ -41,20 +41,8 @@ function Grid(props) {
 		initGrid();
 	}, []);
 
-	var start = [8, 8];
+	var start = [colums / 4, 2];
 	var end = [colums / 2, rows - 3];
-	var walls = [
-		[7, 3],
-		[7, 4],
-		[7, 5],
-		[7, 6],
-		[7, 7],
-		[9, 9],
-		[10, 9],
-		[12, 8],
-		[7, 8],
-		[6, 8]
-	];
 
 	const initGrid = () => {
 		var grid = [];
@@ -64,6 +52,7 @@ function Grid(props) {
 				grid[row].push(createNode(col, row));
 			}
 		}
+		bfs(grid);
 		setGrid(grid);
 	}
 
@@ -81,7 +70,7 @@ function Grid(props) {
 		};
 	 }
 
-	 const bfs = () => {
+	 const bfs = (grid) => {
 
 		var location = {
 			row: start[0],
@@ -98,20 +87,20 @@ function Grid(props) {
 			var col = currentLocation.col;
 			if (row === end[0] && col === end[1]) {
 				setVisited(visited);
-				getPath();
+				getPath(grid);
 				return currentLocation;
 			}
-			if (Grid[row][col].isVisited === false) {
-				Grid[row][col].isVisited = true;
-				visited.push(Grid[row][col]);
+			if (grid[row][col].isVisited === false) {
+				grid[row][col].isVisited = true;
+				visited.push(grid[row][col]);
 			}else {
 				continue;
 			}
-			var neighbors = getNeighbors(row, col);
+			var neighbors = getNeighbors(grid, row, col);
 			for (let neighbor of neighbors) {
-				if (Grid[neighbor.row][neighbor.col].isVisited !== true) {
+				if (grid[neighbor.row][neighbor.col].isVisited !== true) {
 					queue.push(neighbor);
-					Grid[neighbor.row][neighbor.col].prevNode = currentLocation;
+					grid[neighbor.row][neighbor.col].prevNode = currentLocation;
 				}
 			}
 		}
@@ -119,27 +108,27 @@ function Grid(props) {
 		return false;
 	};
 
-	const getNeighbors = (row, col) => {
+	const getNeighbors = (grid, row, col) => {
 		let neighbors = [];
-		if (validNode(row, col - 1)) {
+		if (validNode(grid, row, col - 1)) {
 			neighbors.push({
 				row: row,
 				col: col - 1,
 			});
 		}
-		if (validNode(row, col + 1)) {
+		if (validNode(grid, row, col + 1)) {
 			neighbors.push({
 				row: row,
 				col: col + 1,
 			});
 		}
-		if (validNode(row - 1, col)) {
+		if (validNode(grid, row - 1, col)) {
 			neighbors.push({
 				row: row - 1,
 				col: col,
 			});
 		}
-		if (validNode(row + 1, col)) {
+		if (validNode(grid, row + 1, col)) {
 			neighbors.push({
 				row: row + 1,
 				col: col,
@@ -148,19 +137,19 @@ function Grid(props) {
 		return neighbors;
 	};
 
-	const validNode = (row, col) => {
-		var rowLength = Grid.length;
-		var colLength = Grid[0].length;
+	const validNode = (grid, row, col) => {
+		var rowLength = grid.length;
+		var colLength = grid[0].length;
 		if (row < 0 || row >= rowLength || col < 0 || col >= colLength) {
 			return false;
 		}
-		if (Grid[row][col].isWall) {
+		if (grid[row][col].isWall) {
 			return false;
 		}
 		return true;
 	};
 
-	const getPath = () => {
+	const getPath = (grid) => {
 		var path = [];
 		var currentNodeCord = {
 			row: end[0],
@@ -170,13 +159,13 @@ function Grid(props) {
 		path.push(currentNodeCord);
 		var curRow = currentNodeCord.row;
 		var curCol = currentNodeCord.col;
-		var prevNodeCord = Grid[curRow][curCol].prevNode;
+		var prevNodeCord = grid[curRow][curCol].prevNode;
 		while (prevNodeCord !== null) {
 			currentNodeCord = prevNodeCord;
 			path.push(currentNodeCord);
 			var curRow = currentNodeCord.row;
 			var curCol = currentNodeCord.col;
-			var curNode = Grid[curRow][curCol];
+			var curNode = grid[curRow][curCol];
 			prevNodeCord = curNode.prevNode;
 		}
 		
@@ -193,6 +182,7 @@ function Grid(props) {
 				markVisited(row, col);
 			}, 5 * i);
 		}
+		drawPath();
 	};
 
 	const drawPath = () => {
@@ -214,16 +204,6 @@ function Grid(props) {
 	const markVisited = (row, col) => {
 		document.getElementById(`node-${row}-${col}`).className = 'node visited';
 	};
-
-	const addWalls = () => {
-		for (let i = 0; i < walls.length; i++) {
-			var location = walls[i];
-			var row = location[0];
-			var col = location[1];
-			console.log(Grid[row][col])
-		}
-	};
-	
 
 	var GridMap = Grid.map((row, rowIndex) => {
 		return (
@@ -254,9 +234,7 @@ function Grid(props) {
 			<div className={classes.root}>
 				{GridMap}
 			</div>
-			<Button variant="contained" color="primary" onClick={ () => bfs() }>Run BFS</Button>
 			<Button variant="contained" color="primary" onClick={ () => animateAlgorithm() }>Animate Algorithm</Button>
-			<Button variant="contained" color="primary" onClick={ () => drawPath() }>Draw Path</Button>
 		</>
     )
 }
