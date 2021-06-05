@@ -1,6 +1,6 @@
 .node {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   border: 1px solid black;
 }
 
@@ -10,4 +10,41 @@
 
 .visited {
   background: linear-gradient(45deg, #ffe666 30%, #ffa6a6 90%);
+  animation-name: visitedAnimation;
+  animation-duration: 1.2s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.2);
+    background: linear-gradient(45deg, #ffe666 30%, #ffa6a6 90%);
+    border-radius: 50%;
+  }
+
+  25% {
+    transform: scale(0.5);
+    border-radius: 40%;
+    background: linear-gradient(45deg, #ffe666 30%, #ffa6a6 90%);
+  }
+
+  50% {
+    tranform: scale(0.8);
+    border-radius: 30%;
+    background: linear-gradient(45deg, #ffe666 30%, #ffa6a6 90%);
+  }
+
+  75% {
+    transform: scale(1.1);
+    border-radius: 20%;
+    background: linear-gradient(45deg, #ffe666 30%, #ffa6a6 90%);
+  }
+
+  100% {
+    transform: scale(1);
+    border-radius: 0;
+    background: linear-gradient(45deg, #ffe666 30%, #ffa6a6 90%);
+  }
 }
