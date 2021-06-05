@@ -1,11 +1,11 @@
-import Grid from './Components/Grid'
+import GridContainer from './Components/GridContainer'
 import './App.css';
 
 function App() {
 
   return (
     <div className="App">
-      <Grid rows={20} colums={20}/>
+      <GridContainer rows={20} colums={20}/>
     </div>
   );
 }

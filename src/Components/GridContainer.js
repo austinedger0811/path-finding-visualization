@@ -21,49 +21,42 @@ const setWall = (grid, col, row) => {
 	grid[col][row].isWall = true;
 };
 
-const setWalls = (grid, walls) => {
-	for (let i = 0; i < walls.length; i++) {
-		let wall = walls[i];
-		setWall(grid, wall[0], wall[1]);
-	}
-};
-
-function Grid(props) {
+function GridContainer(props) {
 
     let classes = useStyles(props);
     const { rows, colums } = props;
 
 	const [Grid, setGrid] = useState([]);
-	const [Path, setPath] = useState([]);
 	const [Visited, setVisited] = useState([]);
+	const [Path, setPath] = useState([]);
 
 	useEffect(() => {
 		initGrid();
 	}, []);
 
-	var start = [colums / 4, 2];
-	var end = [colums / 2, rows - 3];
+	var start = [2, rows / 2];
+	var end = [colums- 3, colums / 2];
 
 	const initGrid = () => {
 		var grid = [];
 		for (let row = 0; row < rows; row++) {
 			grid.push([])
 			for (let col = 0; col < colums; col++) {
-				grid[row].push(createNode(col, row));
+				grid[row].push(createNode(row, col));
 			}
 		}
 		setGrid(grid);
 		bfs(grid);
 	}
 
-	const createNode = (col, row) => {
+	const createNode = (row, col) => {
 		return {
-			col,
 			row,
-			isStart: col === start[0] && row === start[1],
-			isEnd: col === end[0] && row === end[1],
+			col,
+			isStart: row === start[0] && col === start[1],
+			isEnd: row === end[0] && col === end[1],
 			isVisited: false,
-			isWall: false,
+			isWall: (Math.floor(Math.random() * 10) > 6),
 			isPath: false,
 			distance: Infinity,
 			prevNode: null,
@@ -163,8 +156,8 @@ function Grid(props) {
 		while (prevNodeCord !== null) {
 			currentNodeCord = prevNodeCord;
 			path.push(currentNodeCord);
-			var curRow = currentNodeCord.row;
-			var curCol = currentNodeCord.col;
+			curRow = currentNodeCord.row;
+			curCol = currentNodeCord.col;
 			var curNode = grid[curRow][curCol];
 			prevNodeCord = curNode.prevNode;
 		}
@@ -188,19 +181,6 @@ function Grid(props) {
 			}
 		}
 	};
-
-	// const animateAlgorithm = () => {
-	// 	console.log(Visited)
-	// 	for (let i = 1; i < Visited.length - 1; i++) {
-	// 		let nodeCord = Visited[i];
-	// 		let row = nodeCord.row;
-	// 		let col = nodeCord.col;
-	// 		setTimeout(() => {
-	// 			markVisited(row, col);
-	// 		}, 5 * i);
-	// 	}
-	// 	drawPath();
-	// };
 
 	const drawPath = () => {
 		for (let i = 1; i < Path.length - 1; i++) {
@@ -252,8 +232,9 @@ function Grid(props) {
 				{GridMap}
 			</div>
 			<Button variant="contained" color="primary" onClick={ () => animateAlgorithm() }>Animate Algorithm</Button>
+			<Button onClick={() => console.log(Grid)}>test log</Button>
 		</>
     )
 }
 
-export default Grid
+export default GridContainer

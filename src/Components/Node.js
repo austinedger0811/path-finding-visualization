@@ -30,7 +30,7 @@ function Node(props) {
     const { row, col, isStart, isEnd, isWall, isPath, key } = props;
 
     return (
-        <div id={`node-${col}-${row}`} className={`${classes.root} ${isStart ? classes.start : isEnd ? classes.end : isWall ? classes.wall : isPath ? classes.path : classes.normal}`} />
+        <div id={`node-${row}-${col}`} className={`${classes.root} ${isStart ? classes.start : isEnd ? classes.end : isWall ? classes.wall : isPath ? classes.path : classes.normal}`} />
     )
 }
 
