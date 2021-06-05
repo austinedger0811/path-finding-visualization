@@ -52,8 +52,8 @@ function Grid(props) {
 				grid[row].push(createNode(col, row));
 			}
 		}
-		bfs(grid);
 		setGrid(grid);
+		bfs(grid);
 	}
 
 	const createNode = (col, row) => {
@@ -173,17 +173,34 @@ function Grid(props) {
 	};
 
 	const animateAlgorithm = () => {
-		console.log(Visited)
-		for (let i = 1; i < Visited.length - 1; i++) {
-			let nodeCord = Visited[i];
-			let row = nodeCord.row;
-			let col = nodeCord.col;
-			setTimeout(() => {
-				markVisited(row, col);
-			}, 5 * i);
+		for (let i = 1; i <= Visited.length; i++) {
+			if (i === Visited.length) {
+				setTimeout(() => {
+					drawPath();
+				}, 7 * i);
+			} else {
+				let nodeCord = Visited[i];
+				let row = nodeCord.row;
+				let col = nodeCord.col;
+				setTimeout(() => {
+					markVisited(row, col);
+				}, 6 * i);	
+			}
 		}
-		drawPath();
 	};
+
+	// const animateAlgorithm = () => {
+	// 	console.log(Visited)
+	// 	for (let i = 1; i < Visited.length - 1; i++) {
+	// 		let nodeCord = Visited[i];
+	// 		let row = nodeCord.row;
+	// 		let col = nodeCord.col;
+	// 		setTimeout(() => {
+	// 			markVisited(row, col);
+	// 		}, 5 * i);
+	// 	}
+	// 	drawPath();
+	// };
 
 	const drawPath = () => {
 		for (let i = 1; i < Path.length - 1; i++) {
