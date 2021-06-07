@@ -17,25 +17,21 @@ const useStyles = makeStyles({
     }),
 });
 
-const setWall = (grid, col, row) => {
-	grid[col][row].isWall = true;
-};
-
 function GridContainer(props) {
 
     let classes = useStyles(props);
     const { rows, colums } = props;
 
+	var visited = [];
+	var path = [];
 	const [Grid, setGrid] = useState([]);
-	const [Visited, setVisited] = useState([]);
-	const [Path, setPath] = useState([]);
 
 	useEffect(() => {
 		initGrid();
 	}, []);
 
 	var start = [2, rows / 2];
-	var end = [colums- 3, colums / 2];
+	var end = [colums - 3, colums / 2];
 
 	const initGrid = () => {
 		var grid = [];
@@ -45,8 +41,7 @@ function GridContainer(props) {
 				grid[row].push(createNode(row, col));
 			}
 		}
-		setGrid(grid);
-		bfs(grid);
+		setGrid([...grid]);
 	}
 
 	const createNode = (row, col) => {
@@ -56,22 +51,23 @@ function GridContainer(props) {
 			isStart: row === start[0] && col === start[1],
 			isEnd: row === end[0] && col === end[1],
 			isVisited: false,
-			isWall: (Math.floor(Math.random() * 10) > 6),
+			isWall: false,
 			isPath: false,
 			distance: Infinity,
 			prevNode: null,
 		};
 	 }
 
-	 const bfs = (grid) => {
+	 const bfs = () => {
 
 		var location = {
 			row: start[0],
 			col: start[1],
 		};
 	
+		var grid = Grid;
 		var queue = [];
-		var visited = [];
+		//var visited = [];
 		queue.push(location);
 	
 		while (queue.length) {
@@ -79,9 +75,10 @@ function GridContainer(props) {
 			var row = currentLocation.row;
 			var col = currentLocation.col;
 			if (row === end[0] && col === end[1]) {
-				setVisited(visited);
+				setGrid(...[grid]);
+				//setVisited(visited);
 				getPath(grid);
-				return currentLocation;
+				return true;
 			}
 			if (grid[row][col].isVisited === false) {
 				grid[row][col].isVisited = true;
@@ -143,12 +140,11 @@ function GridContainer(props) {
 	};
 
 	const getPath = (grid) => {
-		var path = [];
+		//var path = [];
 		var currentNodeCord = {
 			row: end[0],
 			col: end[1],
 		}
-	
 		path.push(currentNodeCord);
 		var curRow = currentNodeCord.row;
 		var curCol = currentNodeCord.col;
@@ -161,18 +157,20 @@ function GridContainer(props) {
 			var curNode = grid[curRow][curCol];
 			prevNodeCord = curNode.prevNode;
 		}
-		
-		setPath(path.reverse());
+		path.reverse();
+		//setPath([...path]);
 	};
 
 	const animateAlgorithm = () => {
-		for (let i = 1; i <= Visited.length; i++) {
-			if (i === Visited.length) {
+		bfs();
+		console.log(`Visited length: ${visited.length}`)
+		for (let i = 1; i <= visited.length; i++) {
+			if (i === visited.length) {
 				setTimeout(() => {
 					drawPath();
 				}, 7 * i);
 			} else {
-				let nodeCord = Visited[i];
+				let nodeCord = visited[i];
 				let row = nodeCord.row;
 				let col = nodeCord.col;
 				setTimeout(() => {
@@ -183,8 +181,8 @@ function GridContainer(props) {
 	};
 
 	const drawPath = () => {
-		for (let i = 1; i < Path.length - 1; i++) {
-			let nodeCord = Path[i];
+		for (let i = 1; i < path.length - 1; i++) {
+			let nodeCord = path[i];
 			let row = nodeCord.row;
 			let col = nodeCord.col;
 			setTimeout(() => {
@@ -194,12 +192,44 @@ function GridContainer(props) {
 	};
 
 	const markPath = (row, col) => {
-		console.log(`row: ${row}, col: ${col}`)
 		document.getElementById(`node-${row}-${col}`).className = 'node path';
 	};
 
 	const markVisited = (row, col) => {
 		document.getElementById(`node-${row}-${col}`).className = 'node visited';
+	};
+
+	const addRandomWalls = (threshold) => {
+		let grid = [...Grid];
+		for (let row = 0; row < rows; row++) {
+			for (let col = 0; col < colums; col++) {
+				if (!grid[row][col].isStart && !grid[row][col].isEnd) {
+					grid[row][col].isWall = (Math.floor(Math.random() * 10) > threshold);
+				}
+			}
+		}
+		setGrid(grid);
+	};
+
+	const resetGridColors = () => {
+		for (let row = 0; row < rows; row++) {
+			for (let col = 0; col < colums; col++) {
+				document.getElementById(`node-${row}-${col}`).className = 'node';
+			}
+		}
+	};
+
+	const logStates = () => {
+		console.log(Grid)
+		console.log(visited)
+		console.log(path)
+	};
+
+	const reset = () => {
+		visited = [];
+		path = [];
+		resetGridColors();
+		initGrid();
 	};
 
 	var GridMap = Grid.map((row, rowIndex) => {
@@ -232,7 +262,9 @@ function GridContainer(props) {
 				{GridMap}
 			</div>
 			<Button variant="contained" color="primary" onClick={ () => animateAlgorithm() }>Animate Algorithm</Button>
-			<Button onClick={() => console.log(Grid)}>test log</Button>
+			<Button variant="contained" color="primary" onClick={ () => addRandomWalls(6) }>Add Random Walls</Button>
+			<Button variant="contained" color="primary" onClick={ () => reset() }>Reset</Button>
+			<Button variant="contained" color="secondary" onClick={ () => logStates() }>Log Data</Button>
 		</>
     )
 }
