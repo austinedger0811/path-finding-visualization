@@ -67,7 +67,6 @@ function GridContainer(props) {
 	
 		var grid = Grid;
 		var queue = [];
-		//var visited = [];
 		queue.push(location);
 	
 		while (queue.length) {
@@ -76,7 +75,6 @@ function GridContainer(props) {
 			var col = currentLocation.col;
 			if (row === end[0] && col === end[1]) {
 				setGrid(...[grid]);
-				//setVisited(visited);
 				getPath(grid);
 				return true;
 			}
@@ -140,7 +138,6 @@ function GridContainer(props) {
 	};
 
 	const getPath = (grid) => {
-		//var path = [];
 		var currentNodeCord = {
 			row: end[0],
 			col: end[1],
@@ -158,7 +155,6 @@ function GridContainer(props) {
 			prevNodeCord = curNode.prevNode;
 		}
 		path.reverse();
-		//setPath([...path]);
 	};
 
 	const animateAlgorithm = () => {
