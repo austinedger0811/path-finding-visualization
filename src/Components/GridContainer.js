@@ -6,7 +6,11 @@ import Node from './Node'
 import './Grid.css'
 
 const useStyles = makeStyles({
-    root: props => ({
+	root: {
+		display: 'flex',
+		justifyContent: 'center'
+	},
+    grid: props => ({
         display: 'grid',
         gridTemplateColumns: `repeat(${props.colums}, 1fr)`, 
         gridTemplateRows: `repeat(${props.rows}, 1fr)`,
@@ -30,8 +34,8 @@ function GridContainer(props) {
 		initGrid();
 	}, []);
 
-	var start = [2, rows / 2];
-	var end = [colums - 3, colums / 2];
+	var start = [4, rows / 2];
+	var end = [colums - 5, colums / 2];
 
 	const initGrid = () => {
 		var grid = [];
@@ -56,7 +60,7 @@ function GridContainer(props) {
 			distance: Infinity,
 			prevNode: null,
 		};
-	 }
+	 };
 
 	 const bfs = () => {
 
@@ -210,7 +214,9 @@ function GridContainer(props) {
 	const resetGridColors = () => {
 		for (let row = 0; row < rows; row++) {
 			for (let col = 0; col < colums; col++) {
-				document.getElementById(`node-${row}-${col}`).className = 'node';
+				if (Grid[row][col].isStart !== true && Grid[row][col].isEnd !== true){
+					document.getElementById(`node-${row}-${col}`).className = 'node';
+				}
 			}
 		}
 	};
@@ -255,12 +261,14 @@ function GridContainer(props) {
     return (
 		<>
 			<div className={classes.root}>
-				{GridMap}
+				<div className={classes.grid}>
+					{GridMap}
+				</div>
 			</div>
 			<Button variant="contained" color="primary" onClick={ () => animateAlgorithm() }>Animate Algorithm</Button>
 			<Button variant="contained" color="primary" onClick={ () => addRandomWalls(6) }>Add Random Walls</Button>
 			<Button variant="contained" color="primary" onClick={ () => reset() }>Reset</Button>
-			<Button variant="contained" color="secondary" onClick={ () => logStates() }>Log Data</Button>
+			<Button variant="contained" color="secondary" onClick={ () => logStates() }>Log Data</Button>	
 		</>
     )
 }
