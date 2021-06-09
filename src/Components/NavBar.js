@@ -36,38 +36,51 @@ const useStyles = makeStyles((theme) => ({
 		},
   }));
 
-	// Cange to algorithm options
-	const options = [
+	const algorithmOptions = [
 		'Breadth First Search',
 		'Depth First Search',
 		'Dijkstra\'s',
 		'Other',
 	];
-	
-	// add wall options
 
+	const wallOptions = [
+		'None',
+		'Random Wall Generation',
+		'Randomized Depth First Search',
+		'Recursive Division'
+	];
+	
 function NavBar() {
 
     const classes = useStyles();
 
-		const [anchorEl, setAnchorEl] = React.useState(null);
+		const [anchorElAlgorithm, setAnchorElAlgorithm] = React.useState(null);
+		const [anchorElWall, setAnchorElWall] = React.useState(null);
+		const [algorithmIndex, setAlgorithmIndex] = React.useState(0);
+		const [wallIndex, setWallIndex] = React.useState(0);
 
-		// Change to algorith index
-		const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-		// Add hook for wall index
-
-		const handleClickListItem = (event) => {
-			setAnchorEl(event.currentTarget);
+		// could be here!
+		const handleClickAlgorithmListItem = (event) => {
+			setAnchorElAlgorithm(event.currentTarget);
 		};
 
-		const handleMenuItemClick = (event, index) => {
-			setSelectedIndex(index);
-			setAnchorEl(null);
+		const handleClickWallListItem = (event) => {
+			setAnchorElWall(event.currentTarget);
 		};
+
+		const handleAlgorithmItemClick = (event, index) => {
+			setAlgorithmIndex(index);
+			setAnchorElAlgorithm(null);
+		};
+
+		const handleWallItemClick = (event, index) => {
+			setWallIndex(index);
+			setAnchorElWall(null);
+		}
 	
 		const handleClose = () => {
-			setAnchorEl(null);
+			setAnchorElAlgorithm(null);
+			setAnchorElWall(null);
 		};
 
     return (
@@ -84,23 +97,23 @@ function NavBar() {
 									aria-aria-haspopup="true"
 									aria-controls="search-algorithm"
 									aria-label="Search Algorithm"
-									onClick={handleClickListItem}
+									onClick={handleClickAlgorithmListItem}
 								>
-									<ListItemText primary="Search Algorithm" secondary={options[selectedIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
+									<ListItemText primary="Search Algorithm" secondary={algorithmOptions[algorithmIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
 								</ListItem>
 							</List>
 							<Menu
 								id="search-algorithm"
-								anchorEl={anchorEl}
+								anchorEl={anchorElAlgorithm}
 								keepMounted
-								open={Boolean(anchorEl)}
+								open={Boolean(anchorElAlgorithm)}
 								onClose={handleClose}
 							>
-								{options.map((option, index) => (
+								{algorithmOptions.map((option, index) => (
 									<MenuItem
-										key={option}
-										selected={index === selectedIndex}
-										onClick={(event) => handleMenuItemClick(event, index)}
+										key={algorithmOptions}
+										selected={index === algorithmIndex}
+										onClick={(event) => handleAlgorithmItemClick(event, index)}
 									>
             				{option}
           				</MenuItem>
@@ -114,33 +127,28 @@ function NavBar() {
 									aria-aria-haspopup="true"
 									aria-controls="add-walls"
 									aria-label="Add Walls"
-									onClick={handleClickListItem}
+									onClick={handleClickWallListItem}
 								>
-									<ListItemText primary="Add Walls" secondary={options[selectedIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
+									<ListItemText primary="Wall Generation" secondary={wallOptions[wallIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
 								</ListItem>
 							</List>
 							<Menu
 								id="add-walls"
-								anchorEl={anchorEl}
+								anchorEl={anchorElWall}
 								keepMounted
-								open={Boolean(anchorEl)}
+								open={Boolean(anchorElWall)}
 								onClose={handleClose}
 							>
-								{options.map((option, index) => (
+								{wallOptions.map((option, index) => (
 									<MenuItem
-										key={option}
-										selected={index === selectedIndex}
-										onClick={(event) => handleMenuItemClick(event, index)}
+										key={wallOptions}
+										selected={index === wallIndex}
+										onClick={(event) => handleWallItemClick(event, index)}
 									>
             				{option}
           				</MenuItem>
         				))}
 							</Menu>
-
-
-						
-
-							<Button variant="contained" color="primary" className={classes.button} endIcon={<ArrowDropDownIcon />} disableElevation>Add Walls</Button>
 							<Button variant="contained" color="secondary" className={classes.button} disableElevation>Run Visualization</Button>
 							<Button variant="contained" color="secondary" className={classes.button} disableElevation>Reset</Button>
 					</Toolbar>
