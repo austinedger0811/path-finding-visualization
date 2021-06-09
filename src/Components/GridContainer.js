@@ -18,6 +18,7 @@ const useStyles = makeStyles({
         width: props.colums * 20,
         height: props.rows * 20,
         justifyContent: 'center',
+		backgroundColor: 'white'
     }),
 });
 
