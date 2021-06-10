@@ -1,7 +1,9 @@
-import React, {useState, useEffect } from 'react'
+import React, {useState, useEffect, useContext } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Button from '@material-ui/core/Button'
 import Node from './Node'
+
+import { OptionsContext } from '../Context/OptionsContext'
 
 import './Grid.css'
 
@@ -18,7 +20,6 @@ const useStyles = makeStyles({
         width: props.colums * 20,
         height: props.rows * 20,
         justifyContent: 'center',
-		backgroundColor: 'white'
     }),
 });
 
@@ -26,6 +27,7 @@ function GridContainer(props) {
 
     let classes = useStyles(props);
     const { rows, colums } = props;
+	const { algorithmIndex, wallIndex } = useContext(OptionsContext);
 
 	var visited = [];
 	var path = [];

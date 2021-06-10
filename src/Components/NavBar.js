@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -13,6 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
+import { OptionsContext } from '../Context/OptionsContext'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(2),
     },
 		button: {
-			marginRight: theme.spacing(2)
+			marginRight: theme.spacing(2),
 		},
     title: {
         marginRight: theme.spacing(12)
@@ -56,10 +58,9 @@ function NavBar() {
 
 		const [anchorElAlgorithm, setAnchorElAlgorithm] = React.useState(null);
 		const [anchorElWall, setAnchorElWall] = React.useState(null);
-		const [algorithmIndex, setAlgorithmIndex] = React.useState(0);
-		const [wallIndex, setWallIndex] = React.useState(0);
 
-		// could be here!
+		const { algorithmIndex, setAlgorithmIndex, wallIndex, setWallIndex } = useContext(OptionsContext);
+
 		const handleClickAlgorithmListItem = (event) => {
 			setAnchorElAlgorithm(event.currentTarget);
 		};
@@ -87,70 +88,70 @@ function NavBar() {
 			<div className={classes.root}>
 				<AppBar position="static">
 					<Toolbar>
-							<IconButton className={classes.menuButton} edge="start" color="inherit" aria-label="menu">
-								<MenuIcon />
-							</IconButton>
-							<Typography className={classes.title} variant="h6">Path Finding Visualizer</Typography>
-							<List component="nav" aria-label="algorithm selector">
-								<ListItem
-									button
-									aria-aria-haspopup="true"
-									aria-controls="search-algorithm"
-									aria-label="Search Algorithm"
-									onClick={handleClickAlgorithmListItem}
-								>
-									<ListItemText primary="Search Algorithm" secondary={algorithmOptions[algorithmIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
-								</ListItem>
-							</List>
-							<Menu
-								id="search-algorithm"
-								anchorEl={anchorElAlgorithm}
-								keepMounted
-								open={Boolean(anchorElAlgorithm)}
-								onClose={handleClose}
+						<IconButton className={classes.menuButton} edge="start" color="inherit" aria-label="menu">
+							<MenuIcon />
+						</IconButton>
+						<Typography className={classes.title} variant="h6">Path Finding Visualizer</Typography>
+						<List component="nav" aria-label="algorithm selector">
+							<ListItem
+								button
+								aria-aria-haspopup="true"
+								aria-controls="search-algorithm"
+								aria-label="Search Algorithm"
+								onClick={handleClickAlgorithmListItem}
 							>
-								{algorithmOptions.map((option, index) => (
-									<MenuItem
-										key={algorithmOptions}
-										selected={index === algorithmIndex}
-										onClick={(event) => handleAlgorithmItemClick(event, index)}
-									>
-            				{option}
-          				</MenuItem>
-        				))}
-							</Menu>
+								<ListItemText primary="Search Algorithm" secondary={algorithmOptions[algorithmIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
+							</ListItem>
+						</List>
+						<Menu
+							id="search-algorithm"
+							anchorEl={anchorElAlgorithm}
+							keepMounted
+							open={Boolean(anchorElAlgorithm)}
+							onClose={handleClose}
+						>
+							{algorithmOptions.map((option, index) => (
+								<MenuItem
+									key={algorithmOptions}
+									selected={index === algorithmIndex}
+									onClick={(event) => handleAlgorithmItemClick(event, index)}
+								>
+									{option}
+								</MenuItem>
+							))}
+						</Menu>
 
 
-							<List component="nav" aria-label="add walls">
-								<ListItem
-									button
-									aria-aria-haspopup="true"
-									aria-controls="add-walls"
-									aria-label="Add Walls"
-									onClick={handleClickWallListItem}
-								>
-									<ListItemText primary="Wall Generation" secondary={wallOptions[wallIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
-								</ListItem>
-							</List>
-							<Menu
-								id="add-walls"
-								anchorEl={anchorElWall}
-								keepMounted
-								open={Boolean(anchorElWall)}
-								onClose={handleClose}
+						<List component="nav" aria-label="add walls">
+							<ListItem
+								button
+								aria-aria-haspopup="true"
+								aria-controls="add-walls"
+								aria-label="Add Walls"
+								onClick={handleClickWallListItem}
 							>
-								{wallOptions.map((option, index) => (
-									<MenuItem
-										key={wallOptions}
-										selected={index === wallIndex}
-										onClick={(event) => handleWallItemClick(event, index)}
-									>
-            				{option}
-          				</MenuItem>
-        				))}
-							</Menu>
-							<Button variant="contained" color="secondary" className={classes.button} disableElevation>Run Visualization</Button>
-							<Button variant="contained" color="secondary" className={classes.button} disableElevation>Reset</Button>
+								<ListItemText primary="Wall Generation" secondary={wallOptions[wallIndex]} classes={{ secondary: classes.listItemSecondaryText }} />
+							</ListItem>
+						</List>
+						<Menu
+							id="add-walls"
+							anchorEl={anchorElWall}
+							keepMounted
+							open={Boolean(anchorElWall)}
+							onClose={handleClose}
+						>
+							{wallOptions.map((option, index) => (
+								<MenuItem
+									key={wallOptions}
+									selected={index === wallIndex}
+									onClick={(event) => handleWallItemClick(event, index)}
+								>
+									{option}
+								</MenuItem>
+							))}
+						</Menu>
+						<Button variant="contained" color="secondary" className={classes.button} disableElevation>Run Visualization</Button>
+						<Button variant="contained" color="secondary" className={classes.button} disableElevation>Reset</Button>
 					</Toolbar>
 				</AppBar> 
       </div>
