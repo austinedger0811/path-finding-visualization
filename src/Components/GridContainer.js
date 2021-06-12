@@ -268,7 +268,6 @@ const GridContainer = React.forwardRef((props, ref) => {
 				</div>
 			</div>
 			<Button variant="contained" color="primary" onClick={ () => addRandomWalls(6) }>Add Random Walls</Button>
-			<Button variant="contained" color="primary" onClick={ () => reset() }>Reset</Button>
 		</>
     )
 });
