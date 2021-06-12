@@ -52,8 +52,9 @@ const useStyles = makeStyles((theme) => ({
 		'Recursive Division'
 	];
 	
-function NavBar() {
+function NavBar(props) {
 
+		const { handleRunVisualizationClick, handleResetClick } = props;
     const classes = useStyles();
 
 		const [anchorElAlgorithm, setAnchorElAlgorithm] = React.useState(null);
@@ -150,8 +151,8 @@ function NavBar() {
 								</MenuItem>
 							))}
 						</Menu>
-						<Button variant="contained" color="secondary" className={classes.button} disableElevation>Run Visualization</Button>
-						<Button variant="contained" color="secondary" className={classes.button} disableElevation>Reset</Button>
+						<Button variant="contained" color="secondary" className={classes.button} onClick={handleRunVisualizationClick} disableElevation>Run Visualization</Button>
+						<Button variant="contained" color="secondary" className={classes.button} onClick={handleResetClick} disableElevation>Reset</Button>
 					</Toolbar>
 				</AppBar> 
       </div>

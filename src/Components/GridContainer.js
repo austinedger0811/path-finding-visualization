@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext } from 'react'
+import React, {useState, useEffect, useContext, useImperativeHandle } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Button from '@material-ui/core/Button'
 import Node from './Node'
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     }),
 });
 
-function GridContainer(props) {
+const GridContainer = React.forwardRef((props, ref) => {
 
     let classes = useStyles(props);
     const { rows, colums } = props;
@@ -183,6 +183,10 @@ function GridContainer(props) {
 		}
 	};
 
+	useImperativeHandle(ref, () => ({
+		animateAlgorithm
+	}));
+
 	const drawPath = () => {
 		for (let i = 1; i < path.length - 1; i++) {
 			let nodeCord = path[i];
@@ -223,13 +227,7 @@ function GridContainer(props) {
 			}
 		}
 	};
-
-	const logStates = () => {
-		console.log(Grid)
-		console.log(visited)
-		console.log(path)
-	};
-
+	
 	const reset = () => {
 		visited = [];
 		path = [];
@@ -268,12 +266,10 @@ function GridContainer(props) {
 					{GridMap}
 				</div>
 			</div>
-			<Button variant="contained" color="primary" onClick={ () => animateAlgorithm() }>Animate Algorithm</Button>
 			<Button variant="contained" color="primary" onClick={ () => addRandomWalls(6) }>Add Random Walls</Button>
 			<Button variant="contained" color="primary" onClick={ () => reset() }>Reset</Button>
-			<Button variant="contained" color="secondary" onClick={ () => logStates() }>Log Data</Button>	
 		</>
     )
-}
+});
 
 export default GridContainer
