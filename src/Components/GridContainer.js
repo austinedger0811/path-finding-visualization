@@ -33,6 +33,11 @@ const GridContainer = React.forwardRef((props, ref) => {
 	var path = [];
 	const [Grid, setGrid] = useState([]);
 
+	useImperativeHandle(ref, () => ({
+		animateAlgorithm,
+		reset
+	}));
+
 	useEffect(() => {
 		initGrid();
 	}, []);
@@ -182,10 +187,6 @@ const GridContainer = React.forwardRef((props, ref) => {
 			}
 		}
 	};
-
-	useImperativeHandle(ref, () => ({
-		animateAlgorithm
-	}));
 
 	const drawPath = () => {
 		for (let i = 1; i < path.length - 1; i++) {
